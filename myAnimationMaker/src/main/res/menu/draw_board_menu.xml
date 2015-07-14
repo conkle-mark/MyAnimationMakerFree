@@ -1,0 +1,62 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/cancel_draw_frame"
+        android:showAsAction="never"
+        android:title="@string/cancel_frame" />
+    <item
+        android:id="@+id/eraser"
+        android:showAsAction="never"
+        android:title="@string/eraser" />
+    <item
+        android:id="@+id/used_colors"
+        android:showAsAction="never"
+        android:title="@string/used_colors" />
+    <item
+        android:id="@+id/prev_frame"
+        android:showAsAction="never"
+        android:title="@string/prev_frame" />
+    <item
+        android:id="@+id/discard_last_draw"
+        android:showAsAction="never"
+        android:title="@string/discard_last_draw" />
+    <item
+        android:id="@+id/redo_last_draw"
+        android:showAsAction="never"
+        android:title="@string/redo_last_draw" />
+    <!--
+    <item
+        android:id="@+id/set_background_image"
+        android:showAsAction="never"
+        android:title="@string/set_background_image" />
+    -->
+    <item
+        android:id="@+id/save_draw_frame"
+        android:showAsAction="never"
+        android:title="@string/save_frame" />
+    <item
+        android:id="@+id/save_and_close_draw_frame"
+        android:showAsAction="never"
+        android:title="@string/save_close_frame" />
+    <item
+        android:id="@+id/line_width"
+        android:icon="@drawable/line_width"
+        android:showAsAction="ifRoom"
+        android:title="@string/line_width" />
+    <!--
+    <item
+        android:id="@+id/line_type"
+        android:title="@string/line_type"
+        android:icon="@drawable/pen_brush"
+        android:showAsAction="ifRoom"/>
+    -->
+    <item
+        android:id="@+id/line_color"
+        android:icon="@drawable/color"
+        android:showAsAction="ifRoom"
+        android:title="@string/line_color" />
+    <item
+        android:id="@+id/draw_about"
+        android:orderInCategory="101"
+        android:showAsAction="never"
+        android:title="@string/about" />
+</menu>
