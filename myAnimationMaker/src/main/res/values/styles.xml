@@ -1,0 +1,31 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="AppTheme.CyanNoActionBar">
+
+    </style>
+
+    <style name="MyCustomToolBarTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    
+    <style name="GifMoviewView" parent="@android:style/Widget"></style>
+
+    <style name="toolbarStyle">@style/Widget.AppCompat.Toolbar</style>
+
+    <style name="AppTheme.CyanNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryCyan</item>
+        <item name="colorPrimaryDark">@color/primaryCyanDark</item>
+        <item name="colorAccent">@color/accentCyan</item>
+    </style>
+
+</resources>

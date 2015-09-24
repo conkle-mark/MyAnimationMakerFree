@@ -51,6 +51,7 @@ import android.widget.Toast;
  */
 public class DrawFrameActivity extends Activity {
 
+
     private static final String DTAG = "DrawFrameActivity";
 
     /*
@@ -125,7 +126,6 @@ public class DrawFrameActivity extends Activity {
         setContentView(R.layout.edit_board_drawer);
 
         edit_board_parent = (RelativeLayout) findViewById(R.id.my_edit_board_container_drawer);
-
 
         // this is the view group for the dummy button
         //final View controlsView = findViewById(R.id.save_close_buttons);
@@ -329,12 +329,12 @@ public class DrawFrameActivity extends Activity {
         }
     }
 
-    public void previousFrameVisibility(boolean vis) {
+    public void previousFrameVisibility(boolean visible) {
 
         ImageView iv = (ImageView) findViewById(R.id.previous_frame_drawer);
 
 
-        if (vis == true) {
+        if (visible) {
             // set visibility VISIBLE
 
             iv.setVisibility(ImageView.VISIBLE);
@@ -468,7 +468,10 @@ public class DrawFrameActivity extends Activity {
         }
         masterBitmap.recycle();
         thumbBitmap.recycle();
-        boardbm_mutable.recycle();
+        if(boardbm_mutable != null) {
+            boardbm_mutable.recycle();
+        }
+
         framebm.recycle();
     }
 	
@@ -501,30 +504,7 @@ public class DrawFrameActivity extends Activity {
                 story_board_changed = false;
                 returnToStoryBoard(story_board_changed);
                 return true;
-			/*
-			case R.id.save_draw_frame:
-				try {
-					saveToStoryBoard();
-					backpress = 0;
-				} catch (FileNotFoundException e) {
-					
-					e.printStackTrace();
-				} catch (IOException e) {
-				
-					e.printStackTrace();
-				}
-				
-				contentView = (EditBoardTwoView)findViewById(R.id.my_edit_board_drawer);
 
-			      SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-			      SharedPreferences.Editor editor = settings.edit();
-			      editor.putFloat("line_width", contentView.getLineWidth());
-			      editor.putInt("line_color", contentView.getColor());
-
-			      editor.commit();
-			      init(contentView);
-				return true;
-			*/
             case R.id.discard_last_draw:
                 contentView = (EditBoardTwoView) findViewById(R.id.my_edit_board_drawer);
                 contentView.onClickUndo();
@@ -535,12 +515,12 @@ public class DrawFrameActivity extends Activity {
                 contentView.onClickRedo();
                 backpress = 0;
                 return true;
-
+            /*
             case R.id.set_background_image:
                 showChooser(REQUEST_CODE_CHOOSER);
                 backpress = 0;
                 return true;
-
+            */
             case R.id.save_and_close_draw_frame:
                 DrawFrameActivity.this.setResult(RESULT_OK);
                 try {
@@ -552,18 +532,17 @@ public class DrawFrameActivity extends Activity {
 
                     e.printStackTrace();
                 }
-                //theScenes.get(index).setIsModified(true);
                 story_board_changed = true;
                 returnToStoryBoard(story_board_changed);
                 return true;
-			/*
+            /*
 			case R.id.line_type:
 				android.app.FragmentManager ltfm = getFragmentManager();
 				LineTypeDialogFragment line_type = new LineTypeDialogFragment();
 				line_type.show(ltfm, "line type");
 				backpress = 0;
 				return true;
-				*/
+            */
             case R.id.line_color:
                 contentView = (EditBoardTwoView) findViewById(R.id.my_edit_board_drawer);
                 ColorPickerDialogFragment newFragment = ColorPickerDialogFragment.newInstance(contentView.getColor());
@@ -742,9 +721,6 @@ public class DrawFrameActivity extends Activity {
         }
     }
 
-    /*
-    Here’s a method to calculate a sample size value that is a power of two based on a target width and height:
-     */
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;

@@ -130,7 +130,7 @@ public class GifEncoder {
 	   * <code>setSize</code> was not invoked, the size of the first image is used
 	   * for all subsequent frames.
 	   * 
-	   * @param im
+	   * @param
 	   *          BufferedImage containing frame to write.
 	   * @return true if successful.
 	   */

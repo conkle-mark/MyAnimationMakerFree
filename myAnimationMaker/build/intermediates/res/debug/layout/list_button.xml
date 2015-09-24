@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp">
+	<Button android:id="@+id/used_color_button"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false" >
+	</Button>
+</LinearLayout>
+<!-- From: file:/C:/Users/Mark/StudioProjects/MyAnimationMaker/myAnimationMaker/src/main/res/layout/list_button.xml -->

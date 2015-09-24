@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="select_color_here">#ffd12d7a</color>
+    <color name="grid_view_initial_color">#E3DFAF</color>
+    <color name="grid_loaded_color">#4D4B36</color>
+    <color name="background">#DDDDDD</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#727272</color>
+
+    <color name="primaryBlueGrey">#607D8B</color>
+    <color name="primaryBlueGreyDark">#455A64</color>
+    <color name="accentBlueGrey">#BDBDBD</color>
+    <color name="nav_drawer_background">#059BB3</color>
+
+
+    <!-- Theme colors -->
+    <color name="primaryCyan">#00BCD4</color>
+    <color name="primaryCyanDark">#0097A7</color>
+    <color name="accentCyan">#18FFFF</color>
+</resources>

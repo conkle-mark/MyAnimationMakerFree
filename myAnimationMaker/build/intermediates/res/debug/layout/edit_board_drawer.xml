@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/my_edit_board_container_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.bniproductions.android.myanimationmaker.EditBoardTwoView
+            android:id="@+id/my_edit_board_drawer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ccc"
+            android:layout_gravity="center"/>
+        <ImageView
+            android:id="@+id/previous_frame_drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:visibility="gone"
+            android:contentDescription="@string/desc"/>
+    </RelativeLayout>
+</android.support.v4.widget.DrawerLayout>
+<!-- From: file:/C:/Users/Mark/StudioProjects/MyAnimationMaker/myAnimationMaker/src/main/res/layout/edit_board_drawer.xml -->

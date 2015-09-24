@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/Mark/StudioProjects/MyAnimationMaker/aFileChooser/src/main/res/values-zh-rCN/strings.xml -->
+    <eat-comment/>
+    <string name="choose_file">Select a file</string>
+    <string name="empty_directory">Empty Directory</string>
+    <string name="error_selecting_file">Error selecting File</string>
+    <string name="storage_removed">Storage was removed or unmounted.</string>
+</resources>

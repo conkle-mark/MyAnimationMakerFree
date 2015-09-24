@@ -1,0 +1,43 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item 
+        android:id="@+id/new_animation"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/new_animation"/>
+    <item 
+        android:id="@+id/open_animation"
+        android:orderInCategory="2"
+        android:showAsAction="always"
+        android:title="@string/open_animation"/>
+    <item
+        android:id="@+id/open_thumbs"
+        android:orderInCategory="3"
+        android:showAsAction="never"
+        android:title="@string/open_thumbs"/>
+    <item 
+        android:id="@+id/open_slider"
+        android:orderInCategory="4"
+        android:showAsAction="never"
+        android:title="@string/open_slider"/>
+    <item
+        android:id="@+id/build_animation"
+        android:orderInCategory="5"
+        android:showAsAction="never"
+        android:title="@string/build_animation"/>
+    <item 
+        android:id="@+id/launch_animation"
+        android:orderInCategory="6"
+        android:showAsAction="never"
+        android:title="@string/launch_animation"/>
+    <item
+        android:id="@+id/email_gif"
+        android:orderInCategory="7"
+        android:showAsAction="never"
+        android:title="@string/email_gif"/>
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="101"
+        android:showAsAction="never"
+        android:title="@string/about"/>
+</menu>
+<!-- From: file:/C:/Users/Mark/StudioProjects/MyAnimationMaker/myAnimationMaker/src/main/res/menu/frame_slider.xml -->

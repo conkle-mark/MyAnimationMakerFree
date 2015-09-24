@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/close_player"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/close_player"/>
+    <item
+        android:id="@+id/stop_player"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:title="@string/stop_player"/>
+    <item
+        android:id="@+id/start_player"
+        android:orderInCategory="2"
+        android:showAsAction="always"
+        android:title="@string/start_player"/>
+</menu>
