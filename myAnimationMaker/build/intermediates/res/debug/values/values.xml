@@ -64,6 +64,8 @@
     <color name="accent_material_light">@color/material_deep_teal_500</color>
     <!-- From: file:/C:/Users/Mark/StudioProjects/MyAnimationMaker/myAnimationMaker/src/main/res/values/colors.xml -->
     <eat-comment/>
+    <color name="activity_background">#003557</color>
+    <color name="activity_text">#95BFC7</color>
     <color name="background">#DDDDDD</color>
     <!-- From: file:/C:/Users/Mark/StudioProjects/MyAnimationMaker/myAnimationMaker/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/values/values.xml -->
     <eat-comment/>
@@ -141,8 +143,9 @@
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
     <!-- From: file:/C:/Users/Mark/StudioProjects/MyAnimationMaker/myAnimationMaker/src/main/res/values/colors.xml -->
     <eat-comment/>
-    <color name="text_primary">#212121</color>
+    <color name="text_primary">#95BFC7</color>
     <color name="text_secondary">#727272</color>
+    <color name="tool_bar_background">#95BFC7</color>
     <declare-styleable name="ActionBar"><attr name="navigationMode"><enum name="normal" value="0"/><enum name="listMode" value="1"/><enum name="tabMode" value="2"/></attr><attr name="displayOptions"><flag name="none" value="0"/><flag name="useLogo" value="0x1"/><flag name="showHome" value="0x2"/><flag name="homeAsUp" value="0x4"/><flag name="showTitle" value="0x8"/><flag name="showCustom" value="0x10"/><flag name="disableHome" value="0x20"/></attr><attr name="title"/><attr format="string" name="subtitle"/><attr format="reference" name="titleTextStyle"/><attr format="reference" name="subtitleTextStyle"/><attr format="reference" name="icon"/><attr format="reference" name="logo"/><attr format="reference" name="divider"/><attr format="reference" name="background"/><attr format="reference|color" name="backgroundStacked"/><attr format="reference|color" name="backgroundSplit"/><attr format="reference" name="customNavigationLayout"/><attr name="height"/><attr format="reference" name="homeLayout"/><attr format="reference" name="progressBarStyle"/><attr format="reference" name="indeterminateProgressStyle"/><attr format="dimension" name="progressBarPadding"/><attr name="homeAsUpIndicator"/><attr format="dimension" name="itemPadding"/><attr format="boolean" name="hideOnContentScroll"/><attr format="dimension" name="contentInsetStart"/><attr format="dimension" name="contentInsetEnd"/><attr format="dimension" name="contentInsetLeft"/><attr format="dimension" name="contentInsetRight"/><attr format="dimension" name="elevation"/><attr format="reference" name="popupTheme"/></declare-styleable>
     <declare-styleable name="ActionBarLayout"><attr name="android:layout_gravity"/></declare-styleable>
     <declare-styleable name="ActionMenuItemView"><attr name="android:minWidth"/></declare-styleable>
@@ -281,9 +284,10 @@
     <dimen name="notification_subtext_size">12dp</dimen>
     <!-- From: file:/C:/Users/Mark/StudioProjects/MyAnimationMaker/myAnimationMaker/src/main/res/values/dimens.xml -->
     <eat-comment/>
-    <dimen name="paddding_left_about_text">25dp</dimen>
+    <dimen name="paddding_left_about_text">30dp</dimen>
     <dimen name="padding_right_about_text">25dp</dimen>
-    <dimen name="padding_top_about_text">25dp</dimen>
+    <dimen name="padding_top_about_text">75dp</dimen>
+    <dimen name="padding_top_settings">65dp</dimen>
     <dimen name="recycler_view_row">48dp</dimen>
     <dimen name="recycler_view_row_padding">4dp</dimen>
     <dimen name="title_margin_left">11dp</dimen>
@@ -344,6 +348,7 @@
     <string name="choose_file">Choose File</string>
     <string name="chooser_label">Chooser</string>
     <string name="close_player">Close Player</string>
+    <string name="create">Create</string>
     <string name="default_line_width">10</string>
     <string name="desc">Frame Number for Story Board</string>
     <string name="determine_new_color">Bottom Slider is Transparency, Right Slider is hue, Select from large Field.</string>
@@ -422,6 +427,7 @@
     <eat-comment/>
     <string name="test">test</string>
     <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_activity_animation_setttings">\u0020 Animation Settings</string>
     <string name="title_activity_draw_frame">Draw the Frame</string>
     <string name="title_activity_launch_anim">Play Animation</string>
     <string name="used_colors">Previous Colors Used</string>

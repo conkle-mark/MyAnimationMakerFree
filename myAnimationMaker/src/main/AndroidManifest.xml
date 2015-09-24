@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bniproductions.android.myanimationmaker"
     android:versionCode="7"
-    android:versionName="1.6">
+    android:versionName="1.6" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -11,25 +11,26 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
     </uses-permission>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/my_animation_icon_circ"
         android:label="@string/app_name"
-        android:theme ="@style/AppBaseTheme" >
-
+        android:theme="@style/AppBaseTheme" >
         <activity
             android:name=".FrameSliderActivity"
-            android:icon="@drawable/my_animation_icon_circ"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:icon="@drawable/my_animation_icon_circ"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
-
         </activity>
         <activity
             android:name=".DrawFrameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:icon="@drawable/my_animation_icon_circ"
             android:hardwareAccelerated="true"
+            android:icon="@drawable/my_animation_icon_circ"
             android:label="@string/title_activity_draw_frame"
             android:screenOrientation="landscape" >
         </activity>
@@ -48,22 +49,26 @@
         </activity>
         <activity
             android:name=".GifPlayerActivity"
-            android:icon="@drawable/my_animation_icon_circ"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
+            android:icon="@drawable/my_animation_icon_circ"
             android:label="@string/title_activity_launch_anim"
             android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name=".AboutActivity"
             android:icon="@drawable/my_animation_icon_circ"
-
-            android:theme="@style/AppBaseTheme">
+            android:theme="@style/AppBaseTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ActivityAnimationSettings"
+            android:label="@string/title_activity_activity_animation_setttings" >
+        </activity>
     </application>
+
 </manifest>

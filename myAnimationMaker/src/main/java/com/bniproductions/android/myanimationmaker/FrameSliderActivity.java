@@ -280,14 +280,14 @@ public class FrameSliderActivity extends Activity {
         saveInstanceState.putInt("thumbRowHeight", thumbRowHeight);
         saveInstanceState.putString("rootDirectory", rootDirectory);
     }
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.frame_slider, menu);
 
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

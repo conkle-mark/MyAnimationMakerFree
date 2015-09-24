@@ -12,9 +12,10 @@
     <dimen name="title_margin_left">11dp</dimen>
     <dimen name="recycler_view_row_padding">4dp</dimen>
     <!-- About Activity dimens-->
-    <dimen name="padding_top_about_text">25dp</dimen>
-    <dimen name="paddding_left_about_text">25dp</dimen>
+    <dimen name="padding_top_about_text">75dp</dimen>
+    <dimen name="paddding_left_about_text">30dp</dimen>
     <dimen name="padding_right_about_text">25dp</dimen>
+    <dimen name="padding_top_settings">65dp</dimen>
     <dimen name="about_text_size">20dp</dimen>
     <dimen name="recycler_view_row">48dp</dimen>
 

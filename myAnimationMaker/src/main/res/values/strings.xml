@@ -13,6 +13,7 @@
     <string name="enter_settings">Info</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
     <string name="file_name">File Name</string>
     <string name="desc">Frame Number for Story Board</string>
     <string name="new_animation">New Project</string>
@@ -100,5 +101,6 @@
     <string name="title_activity_about">AboutActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_activity_animation_setttings">\u0020 Animation Settings</string>
 
 </resources>

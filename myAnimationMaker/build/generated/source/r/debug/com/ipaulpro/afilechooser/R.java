@@ -17,19 +17,19 @@ public final class R {
 		public static final int ic_folder = 0x7f020046;
 	}
 	public static final class id {
-		public static final int explorer_fragment = 0x7f090068;
-		public static final int file_icon = 0x7f090078;
-		public static final int file_name = 0x7f090079;
+		public static final int explorer_fragment = 0x7f090074;
+		public static final int file_icon = 0x7f090084;
+		public static final int file_name = 0x7f09006c;
 	}
 	public static final class layout {
-		public static final int chooser = 0x7f03001d;
-		public static final int file = 0x7f030023;
+		public static final int chooser = 0x7f03001e;
+		public static final int file = 0x7f030024;
 	}
 	public static final class string {
 		public static final int choose_file = 0x7f0b001a;
-		public static final int empty_directory = 0x7f0b0026;
-		public static final int error_selecting_file = 0x7f0b002b;
-		public static final int storage_removed = 0x7f0b0054;
+		public static final int empty_directory = 0x7f0b0027;
+		public static final int error_selecting_file = 0x7f0b002c;
+		public static final int storage_removed = 0x7f0b0055;
 	}
 	public static final class style {
 		public static final int fileChooserIcon = 0x7f0c0123;
