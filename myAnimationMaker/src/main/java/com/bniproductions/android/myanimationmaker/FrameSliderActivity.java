@@ -30,10 +30,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -49,21 +47,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.util.DisplayMetrics;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FrameSliderActivity extends Activity {
+public class FrameSliderActivity extends AppCompatActivity {
 
     /*
      * CONSTANTS
@@ -207,15 +204,27 @@ public class FrameSliderActivity extends Activity {
     Intent intent;
     int position;
 
-    //private MenuItem projectSpinner = null;
+    Toolbar toolbar;
+
+    OverWriteDirectoryDialogFragment overWriteDirectoryDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_frame_slider);
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar2);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setIcon(R.drawable.myanimationicon);
+
+        FrameSliderNavigationFragment frameSliderNavigationFragment = (FrameSliderNavigationFragment)
+                getSupportFragmentManager().findFragmentById(R.id.slider_fragment);
+        frameSliderNavigationFragment.setUp(R.id.slider_fragment, (DrawerLayout) findViewById(R.id.frame_slider_drawer), toolbar);
+
+        Log.d(DTAG, "savedInstanceState null): "+savedInstanceState);
         if (savedInstanceState != null) {
             twoWayGridView = (TwoWayGridView) findViewById(R.id.gridview);
-            twoWayGridView.setBackgroundColor(getResources().getColor(R.color.grid_loaded_color));
+            twoWayGridView.setBackgroundColor(getResources().getColor(R.color.primaryCyan));
             frame_rate = savedInstanceState.getInt("frame_rate", 10);
             animation_length_secs = savedInstanceState.getInt("animation_length");
             animation_length_minutes = savedInstanceState.getFloat("animation_length_minutes");
@@ -236,25 +245,44 @@ public class FrameSliderActivity extends Activity {
             repeat = savedInstanceState.getBoolean("repeat");
             rootDirectory = savedInstanceState.getString("rootDirectory");
         } else {
+            hideSoftKeyBoard();
             mMemoryCache = new BitmapLruCache();
             twoWayGridView = (TwoWayGridView) findViewById(R.id.gridview);
-            twoWayGridView.setBackgroundColor(getResources().getColor(R.color.grid_view_initial_color));
+            twoWayGridView.setBackgroundColor(getResources().getColor(R.color.primaryCyan));
             setScreenDims();
 
             intent = getIntent();
             position = intent.getIntExtra("position", -1);
-            if(position == 0){
-                createProject();
-            }else if(position == 1){
-                openAnimationDialog();
-            }
-        }
-        if (about == false) {
+            repeat = intent.getBooleanExtra("repeat", false);
+            file_name = intent.getStringExtra("file_name");
+            frame_rate = intent.getIntExtra("frame_rate", -1);
+            animation_length_secs = intent.getIntExtra("animation_length", -1);
+            image_height = intent.getIntExtra("image_height", -1);
+            image_width = intent.getIntExtra("image_width", -1);
+            setFileName(file_name);
+            setFrameRate(frame_rate);
+            setAnimationLength(animation_length_secs);
+            setImageSize(image_height, image_width);
 
             getMemRequirements();
-            //about();
             checkProjectList();
             readProjectList();
+            checkDirectory(file_name);
+        }
+        Log.d(DTAG, "about: "+about);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //requestF
+    }
+
+    private void hideSoftKeyBoard(){
+        Log.d(DTAG, "getCurrentFocus: "+getCurrentFocus());
+        if(getCurrentFocus() != null){
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
 
@@ -280,14 +308,7 @@ public class FrameSliderActivity extends Activity {
         saveInstanceState.putInt("thumbRowHeight", thumbRowHeight);
         saveInstanceState.putString("rootDirectory", rootDirectory);
     }
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.frame_slider, menu);
 
-        return true;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -316,7 +337,7 @@ public class FrameSliderActivity extends Activity {
                 return true;
             case R.id.open_slider:
                 if (masterDir != null) {
-                    loadGridView();
+                    //loadGridView();
                 } else {
                     tToast("Master directory is empty, perhaps you haven't opened an animation yet.");
                 }
@@ -355,10 +376,10 @@ public class FrameSliderActivity extends Activity {
                     animPath = data.getStringExtra("animPath");
                     image_height = data.getIntExtra("frame_height", -1);
                     image_width = data.getIntExtra("frame_width", -1);
-                    if(image_height == -1){
-                        Log.d(DTAG, "image_height invalid: "+image_height);
-                    }else if(image_width == -1){
-                        Log.d(DTAG, "image_width invalid: "+image_width);
+                    if (image_height == -1) {
+                        Log.d(DTAG, "image_height invalid: " + image_height);
+                    } else if (image_width == -1) {
+                        Log.d(DTAG, "image_width invalid: " + image_width);
                     }
 
                     System.gc();
@@ -366,7 +387,7 @@ public class FrameSliderActivity extends Activity {
                     if (frame_changed) {
                         if (t_or_s == 1) {
                             thumbs_or_slider = ThumbsOrSlider.SLIDER;
-                            loadGridView();
+                            //loadGridView();
                         } else if (t_or_s == 2) {
                             thumbs_or_slider = ThumbsOrSlider.THUMBS;
                             loadThumbGridView();
@@ -388,27 +409,16 @@ public class FrameSliderActivity extends Activity {
         }
     }
 
-
-
-    /*
-    public boolean getGridLimited() {
-        return grid_limited;
-    }
-
-    public void setGridLimited(boolean grid_limited) {
-        this.grid_limited = grid_limited;
-    }
-    */
-
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(DTAG, "onResume");
     }
 
     @Override
     protected void onPause() {
-        //Log.d(DTAG, "onPause, init: "+init);
         super.onPause();
+        Log.d(DTAG, "onPause");
     }
 
     /*
@@ -422,8 +432,6 @@ public class FrameSliderActivity extends Activity {
                 memoryInfo.getTotalPss() / 1024.0,
                 memoryInfo.getTotalPrivateDirty() / 1024.0,
                 memoryInfo.getTotalSharedDirty() / 1024.0);
-
-        Log.d(DTAG, "memMessage: " + memMessage);
     }
 
     /*
@@ -432,11 +440,8 @@ public class FrameSliderActivity extends Activity {
      */
     protected boolean createProject() {
 
-        android.app.FragmentManager fm = getFragmentManager();
-        AnimationSettingsDialogFragment animationSettingsDialog = new AnimationSettingsDialogFragment();
-        animationSettingsDialog.setRetainInstance(true);
-        animationSettingsDialog.show(fm, "fragment_name");
-
+        intent = new Intent(this, ActivityAnimationSettings.class);
+        startActivity(intent);
         init = true;
         return init;
     }
@@ -476,7 +481,7 @@ public class FrameSliderActivity extends Activity {
                                 type = 2;
                             } else if (length_sec.equals(xpp.getName())) {
                                 type = 3;
-                            } else if(color.equals(xpp.getName())) {
+                            } else if (color.equals(xpp.getName())) {
                                 type = 4;
                             }
                             //Log.d(DTAG, "Start tag "+xpp.getName());
@@ -493,7 +498,7 @@ public class FrameSliderActivity extends Activity {
                             if (type == 3) {
                                 animation_length_secs = Integer.parseInt(xpp.getText());
                             }
-                            if (type == 4){
+                            if (type == 4) {
                                 usedColors.add(Integer.parseInt(xpp.getText()));
                             }
                         }
@@ -542,7 +547,7 @@ public class FrameSliderActivity extends Activity {
                     bw.write("<animation_length_seconds>" + Integer.toString(animation_length_secs) + "</animation_length_seconds>\r\n");
                 }
 
-                for(int i = 0; i < usedColors.size(); i++){
+                for (int i = 0; i < usedColors.size(); i++) {
                     bw.write("<used_colors>" + usedColors.get(i) + "</used_colors>\r\n");
                 }
                 //bw.write("</settings>\r\n");
@@ -606,16 +611,16 @@ public class FrameSliderActivity extends Activity {
 
         encoder.start(bos);
         encoder.setFrameRate(frame_rate);
-        if(repeat) {
+        if (repeat) {
             encoder.setRepeat(0);
-        }else{
+        } else {
             encoder.setRepeat(1);
         }
 
-        Log.d(DTAG, "bitmaps.size: "+bitmaps.length);
+        Log.d(DTAG, "bitmaps.size: " + bitmaps.length);
         int i = 0;
         for (File bitmap : bitmaps) {
-            Log.d(DTAG, "i: "+i);
+            Log.d(DTAG, "i: " + i);
             i++;
             encoder.addFrame(convertToBitmap(bitmap));
         }
@@ -626,6 +631,7 @@ public class FrameSliderActivity extends Activity {
 
     protected File[] buildBMList() {
         File frameDir = new File(masterDir);
+        Log.d(DTAG, "masterDir: " + masterDir);
         File[] imageFiles;
 
         if (frameDir.exists()) {
@@ -662,7 +668,6 @@ public class FrameSliderActivity extends Activity {
         }
     }
 
-
     /*
      * check if project lst exist
      * if not create it
@@ -679,9 +684,10 @@ public class FrameSliderActivity extends Activity {
 
         updateExternalStorageState();
         String dir = Environment.getExternalStorageDirectory().toString();
+        Log.d(DTAG, "line 701 dir: " + dir);
         dir = dir + "/myanimation_projects";
         rootDirectory = dir;
-        Log.d(DTAG, "rootDirectory: "+rootDirectory);
+        Log.d(DTAG, "rootDirectory: " + rootDirectory);
         File projectList = new File(dir);
         projectList.mkdir();
         File projectListFile = new File(dir, "project_list.json");
@@ -700,11 +706,7 @@ public class FrameSliderActivity extends Activity {
                 } catch (IOException ioe) {
                     Log.d(DTAG, "checkProjectList() " + ioe.toString());
                 }
-            }
-
-            Log.d(DTAG, "projectListFile.exists: " + projectListFile.exists());
-
-            if (projectListFile.exists()) {
+            } else if (projectListFile.exists()) {
                 try {
                     stream = new FileInputStream(projectListFile);
 
@@ -721,7 +723,7 @@ public class FrameSliderActivity extends Activity {
 
                 if (jsonStr != null) {
                     if (jsonStr.equals("")) {
-                        Log.d(DTAG, "jsonStr is not null it's the empty String: " + jsonStr.toString());
+
                         String emptyArray = "[]";
                         try {
                             outStream = new FileOutputStream(projectListFile);
@@ -746,7 +748,7 @@ public class FrameSliderActivity extends Activity {
                                 fileName = fileName.substring(index + 1, fileName.length() - 2);
                                 //Log.d(DTAG, "projectNames.get(" + i + ") " + projectNames.get(i));
                                 projectNames.add(fileName);
-                                Log.d(DTAG, "checkProjectList - fileName: "+fileName);
+                                Log.d(DTAG, "checkProjectList - fileName: " + fileName);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -759,8 +761,7 @@ public class FrameSliderActivity extends Activity {
                 Log.d(DTAG, "big json_file_creation_failure");
                 tToast("Big failure, Project list is currupted or non-existant", 1);
             }
-            Log.d(DTAG, "checkProjectList - jsonString: " + jsonStr);
-            // read the contents of the file.
+
             return true;
         } else {
             return false;
@@ -816,7 +817,7 @@ public class FrameSliderActivity extends Activity {
 
             String settings = masterDir + "/settings";
             boolean ok_to_write = checkSDCard(this);
-            if(ok_to_write){
+            if (ok_to_write) {
                 File xml_dir = new File(settings);
                 xml_dir.mkdir();
                 File file = new File(xml_dir, "settings.xml");
@@ -833,7 +834,6 @@ public class FrameSliderActivity extends Activity {
 
         return true;
     }
-
 
 
     /*
@@ -855,7 +855,7 @@ public class FrameSliderActivity extends Activity {
         } else if (thumbs_or_slider == ThumbsOrSlider.THUMBS) {
             intent.putExtra("thumbs_or_slider", 2);
         } else {
-            Log.d(DTAG,"launchDrawFrame - Something has gone horribly wrong");
+            Log.d(DTAG, "launchDrawFrame - Something has gone horribly wrong");
         }
         //Log.d(DTAG, "launchDrawFrame - id: " + id);
         intent.putExtra("index", position);
@@ -951,35 +951,41 @@ public class FrameSliderActivity extends Activity {
     }
 
     /*
-     *
+     * determine if this project already exists
+     * if not, create it
      */
     public void checkDirectory(String file_name) {
         updateExternalStorageState();
         String dir = rootDirectory;
-        Log.d(DTAG, "masterDir: "+masterDir);
-        Log.d(DTAG, "dir: " + dir);
-        Log.d(DTAG, "file_name: "+file_name);
         dir = dir + "/" + file_name;
-        //dir = rootDirectory+dir;
-        Log.d(DTAG, "dir: "+dir);
         File newdir = new File(dir);
+
         if (newdir.exists()) {
             // Build a DialogFragment to ask do you wish to overwrite this directory.
             android.app.FragmentManager fm = getFragmentManager();
-            OverWriteDirectoryDialogFragment overWriteDirectoryDialog = new OverWriteDirectoryDialogFragment();
+
+            overWriteDirectoryDialog = new OverWriteDirectoryDialogFragment();
+
+            // set up the bundle to pass to the DialogFragment
+            Bundle args = new Bundle();
+            args.putString("file_name", file_name);
+            overWriteDirectoryDialog.setArguments(args);
+
             overWriteDirectoryDialog.setRetainInstance(true);
             overWriteDirectoryDialog.show(fm, "fragment_name");
         } else {
+            Log.d(DTAG, "checkDirectory - dir.exists: " + newdir.exists());
+            //deleteDirectory(0);
+            //deleteDirectory();
+
             createFrames();
             loadThumbGridView();
             writeSettingsXML();
-            updateProjectList(dir);
+
+            //updateProjectList(dir);
         }
     }
 
-    public void setRepeat(boolean repeat){
-        this.repeat = repeat;
-    }
 
     private void readProjectList() {
         String jsonStr = null;
@@ -999,7 +1005,7 @@ public class FrameSliderActivity extends Activity {
                     MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
 
                     jsonStr = Charset.defaultCharset().decode(bb).toString();
-                    Log.d(DTAG, "readProjectList - jsonString: "+jsonStr);
+                    Log.d(DTAG, "readProjectList - jsonString: " + jsonStr);
                     inputStream.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -1013,7 +1019,7 @@ public class FrameSliderActivity extends Activity {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void updateProjectList(String filePath) {
-        Log.d(DTAG, "filePath: "+filePath);
+        Log.d(DTAG, "filePath: " + filePath);
         String object = filePath;
         JSONObject jObject = new JSONObject();
         try {
@@ -1080,22 +1086,27 @@ public class FrameSliderActivity extends Activity {
         }
     }
 
-
     /*
      * type consisto over_write, then create new
      * or just delete
      * 1. overwrite
      * 2, just delete
      */
-    public void deleteDirectory(int type) {
+    public void deleteDirectory() {
 
-        int overwrite = type;
+        //int overwrite = type;
 
-        //String del_dir = Environment.getExternalStorageDirectory().toString();
+        // Close the NavigationDrawer
+        //if(overwrite == 1){
+        DrawerLayout mDrawerLayout;
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.frame_slider_drawer);
+        mDrawerLayout.closeDrawers();
+        //}
+
         String del_dir = rootDirectory;
         del_dir = del_dir + "/" + file_name;
         File dir = new File(del_dir);
-		
+
 		/*
 		 * Android System and/or FAT32 has problem maybe with deletes
 		 * and releasing resource, so rename before delete
@@ -1110,17 +1121,15 @@ public class FrameSliderActivity extends Activity {
                 new File(to, children[i]).delete();
             }
             to.delete();
-            if (overwrite == 1) {
-                createFrames();
-                loadThumbGridView();
-                writeSettingsXML();
-            }
-        } else {
-            Log.d(DTAG, "deleteDirectory - trying to delete a non-existant directory");
+
+            createFrames();
+            loadThumbGridView();
+            writeSettingsXML();
         }
     }
 
     public boolean createFrames() {
+        Log.d(DTAG, "createFrames - no_frames: "+no_of_frames);
         String name;
         setScreenDims();
         //setImageDims(screen_height, screen_width);
@@ -1138,9 +1147,8 @@ public class FrameSliderActivity extends Activity {
         display.getSize(size);
         screen_height = size.y;
         screen_width = size.x;
-        rowHeight = screen_height;
-        thumbRowHeight = rowHeight/3;
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        rowHeight = twoWayGridView.getHeight();
+        thumbRowHeight = rowHeight / 3;
     }
 
     private void createJPGs(String jpg_name) {
@@ -1152,37 +1160,30 @@ public class FrameSliderActivity extends Activity {
         // Make a canvas with which we can draw to the bitmap
         Canvas canvas = new Canvas(bm);
         canvas.drawColor(0xffffffff);
+        //Log.d(DTAG, "createJPGs - bm nul: "+bm);
         try {
             if (bm != null) {
                 boolean ok_to_write = checkSDCard(this);
+
                 if (ok_to_write) {
                     updateExternalStorageState();
-                    //String dir = Environment.getExternalStorageDirectory().toString();
+
                     masterDir = rootDirectory + "/" + file_name;
-                    //Log.d(DTAG, "masterDir "+masterDir);
-                    Log.d(DTAG, "createJPGS - file_name: " + file_name);
                     File newdir = new File(masterDir);
-                    Log.d(DTAG, "createJPGS - newDir: " + newdir.toString());
                     if (!newdir.exists()) {
                         newdir.mkdir();
                     }
-                    //Log.d(DTAG, "createJPGS, newdir.exists: " + newdir.exists());
                     OutputStream fos = null;
                     File file = new File(newdir.getAbsolutePath(), jpg_name + ".jpeg");
                     // if file doesn't exists, then create it
                     if (!file.exists()) {
-                        //Log.d(DTAG, "file DNE: "+file.toString());
                         file.createNewFile();
-                        //Log.d(DTAG, "creatNewFile: "+f);
                     }
 
-                    //Log.d(DTAG, "file: "+file.toString());
                     fos = new FileOutputStream(file);
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
 
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                    //mMemoryCache.addBitmapToMemoryCache(jpg_name, bm);
-                    Log.d(DTAG, "createJPGs - mMemoryCache.sizOf: " + mMemoryCache.sizeOf(jpg_name, bm));
                     bos.flush();
                     bos.close();
                     bm.recycle();
@@ -1220,6 +1221,7 @@ public class FrameSliderActivity extends Activity {
         // Make a canvas with which we can draw to the bitmap
         Canvas canvas = new Canvas(bm);
         canvas.drawColor(0xffffffff);
+        //Log.d(DTAG, "createThumbJPGs - bitmap: "+bm);
         try {
             if (bm != null) {
                 boolean ok_to_write = checkSDCard(this);
@@ -1229,30 +1231,24 @@ public class FrameSliderActivity extends Activity {
                     masterDir = rootDirectory + "/" + file_name;
                     thumbs = masterDir + "/" + "thumbs";
                     thumbDir = thumbs;
-                    Log.d(DTAG, "thumbDir "+thumbDir);
+                    Log.d(DTAG, "thumbDir " + thumbDir);
                     File thumbdir = new File(thumbs);
 
                     // make the directory first pass thru
                     if (!thumbdir.exists()) {
-                        //Log.d(DTAG, "newdir DNE: "+newdir.toString());
                         boolean d = thumbdir.mkdir();
-                        Log.d(DTAG, "mkdir: " + d);
                     }
-                    OutputStream fos = null;
+                    OutputStream fos;
                     File file = new File(thumbdir.getAbsolutePath(), thumbName + ".jpeg");
                     // if file doesn't exists, then create it
                     if (!file.exists()) {
-                        //Log.d(DTAG, "file DNE: "+file.toString());
                         boolean f = file.createNewFile();
                         Log.d(DTAG, "creatNewFile: " + f);
                     }
-                    //Log.d(DTAG, "file: "+file.toString());
                     fos = new FileOutputStream(file);
                     BufferedOutputStream bos = new BufferedOutputStream(fos);
-
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                    //mMemoryCache.addBitmapToMemoryCache(jpg_name, bm);
-                    Log.d(DTAG, "createJPGs - mMemoryCache.sizOf: " + mMemoryCache.sizeOf(thumbName, bm));
+
                     bos.flush();
                     bos.close();
                     bm.recycle();
@@ -1267,8 +1263,8 @@ public class FrameSliderActivity extends Activity {
         }
     }
 
+    /*
     protected void loadGridView() {
-        //Log.d(DTAG, "loadGridView");
         File frameDir = new File(masterDir);
         File[] imageFiles;
         FrameCell fCell;
@@ -1338,6 +1334,7 @@ public class FrameSliderActivity extends Activity {
             Log.d(DTAG, "loadGridView() failed frameDir.exists() " + frameDir.exists());
         }
     }
+    */
 
     protected void loadThumbGridView() {
         File thumbsDir = new File(thumbDir);
@@ -1345,12 +1342,14 @@ public class FrameSliderActivity extends Activity {
         FrameCell fCell;
         TextView textView;
         ArrayList<FrameCell> frameCells;
+        Log.d(DTAG, "loadThumbGridView - thumbsDir.exists: "+thumbsDir.exists());
+        Log.d(DTAG, "thumbsDir.toString: "+thumbDir.toString());
         if (thumbsDir.exists()) {
             thumbs_or_slider = ThumbsOrSlider.THUMBS;
             frameCells = new ArrayList<FrameCell>();
 
             myGridView = (TwoWayGridView) findViewById(R.id.gridview);
-            myGridView.setBackgroundColor(getResources().getColor(R.color.grid_loaded_color));
+            myGridView.setBackgroundColor(getResources().getColor(R.color.primaryCyan));
 
             myGridView.setRowHeight(thumbRowHeight);
             myGridView.setPadding(0, 10, 0, 0);
@@ -1362,7 +1361,7 @@ public class FrameSliderActivity extends Activity {
                     return name.toLowerCase().endsWith(".jpeg");
                 }
             });
-
+            Log.d(DTAG, "loadThumbGridView - imageFiles.size: "+imageFiles.length);
             // Let's make sure the files are sorted
             Arrays.sort(imageFiles, new Comparator<File>() {
 
@@ -1385,17 +1384,16 @@ public class FrameSliderActivity extends Activity {
             });
 
             int i = 0;
-            for (File file : imageFiles) {
 
+            for (File file : imageFiles) {
+                Log.d(DTAG, "loadThumbGridView - image_file_name: "+file.getAbsolutePath());
                 textView = new TextView(this);
-                Log.d(DTAG, "file.getName: " + file.getName());
                 textView.setText(file.getName());
                 fCell = new FrameCell(this, null, file, textView);
                 frameCells.add(fCell);
-
-                Log.d(DTAG, "loadGridView frameCells.get(" + i + ").toString " + frameCells.get(i).toString());
                 i++;
             }
+            Log.d(DTAG, "frameCells.size: "+frameCells.size());
 
             myGridView.setAdapter(new ImageAdapter(this, 0, frameCells));
 
@@ -1414,14 +1412,12 @@ public class FrameSliderActivity extends Activity {
         Bitmap bmp = null;
         try {
             bmp = BitmapFactory.decodeFile(file.toString());
-            Log.d(DTAG, "converToBitmap - bmp.isRecycled: "+bmp.isRecycled());
-            Log.d(DTAG, "converToBitmap - bmp null? "+bmp);
         } catch (java.lang.OutOfMemoryError e) {
             Log.d(DTAG, "convertToBitmap - bmp null");
-            //System.gc();
         }
         return bmp;
     }//convertToBitmap
+
     /*
     public String readFileName(File file) {
         String name = file.getName();
@@ -1504,16 +1500,15 @@ public class FrameSliderActivity extends Activity {
 
     private void handleExternalStorageState(boolean mExternalStorageAvailable2,
                                             boolean mExternalStorageWriteable2) {
-        if (mExternalStorageAvailable2 && mExternalStorageWriteable2) {
-            Log.d(DTAG, "both are true");
+        if (mExternalStorageAvailable2 && mExternalStorageAvailable2) {
+            Log.d(DTAG, "handleExternalStorageState - mExternalStorageAvailable2 & mExternalStorageAvailable2: true");
         } else if (mExternalStorageWriteable2) {
-            Log.d(DTAG, "mExternalStorageWriteable2 true");
+            Log.d(DTAG, "handleExternalStorageState - mExternalStorageWriteable2 true");
         } else if (mExternalStorageAvailable2) {
-            Log.d(DTAG, "mExternalStorageAvailable2 true");
+            Log.d(DTAG, "handleExternalStorageState - mExternalStorageAvailable2 true");
         } else {
-            Log.d(DTAG, "neither are true");
+            Log.d(DTAG, "handleExternalStorageState - mExternalStorageAvailable2 & mExternalStorageAvailable2: false");
         }
-
     }
 
     void startWatchingExternalStorage() {
@@ -1595,23 +1590,13 @@ public class FrameSliderActivity extends Activity {
     @Override
     public void onBackPressed() {
 
-        new AlertDialog.Builder(this)
-                .setTitle("Really Exit?")
-                .setMessage("Are you sure you want to exit?")
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
+        Log.d(DTAG, "onBackPressed");
 
-                        Log.d(DTAG, "cancel button - back_stack_tracker: ");
-                    }
-                })
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        android.app.FragmentManager fm = getFragmentManager();
 
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        FrameSliderActivity.super.onBackPressed();
-                        finish();
-                    }
-                }).create().show();
-
+        OnBackPressedDialogFragment onBack = new OnBackPressedDialogFragment();
+        onBack.setRetainInstance(true);
+        onBack.show(fm, "fragment_name");
     }
 
     private class BuildGif extends AsyncTask<Void, Void, Boolean> {
@@ -1628,14 +1613,14 @@ public class FrameSliderActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            Log.d(TAG, "onPreExecute - masterDir: "+masterDir);
-            Log.d(TAG, "onPreExecute - file_name: "+file_name);
+            Log.d(TAG, "onPreExecute - masterDir: " + masterDir);
+            Log.d(TAG, "onPreExecute - file_name: " + file_name);
             progressDialog.show();
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            animPath = masterDir+"/"+file_name+".gif";
+            animPath = masterDir + "/" + file_name + ".gif";
 
             FileOutputStream outStream = null;
             try {
@@ -1651,7 +1636,7 @@ public class FrameSliderActivity extends Activity {
 
         @Override
         protected void onPostExecute(Boolean isBuilt) {
-            Log.d(TAG, "onPostExecute - animPath: "+animPath);
+            Log.d(TAG, "onPostExecute - animPath: " + animPath);
             progressDialog.dismiss();
         }
 

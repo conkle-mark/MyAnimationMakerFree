@@ -16,33 +16,31 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ImageAdapter extends ArrayAdapter<FrameCell>{
-	
+
+	  private final static String TAG = "ImageAdapter";
 	  public Context mContext;
 	  Bitmap bmp = null;
 
-	  private ArrayList<FrameCell> mStoryBoardCells;
+	  private ArrayList<FrameCell> mFrameCells;
 
-	  	public ImageAdapter(Context c, int res, ArrayList<FrameCell> sbCells){
-	  		super(c, res, sbCells);
-			  //Log.i("ImageAdapter", "Constructor");
+	  	public ImageAdapter(Context c, int res, ArrayList<FrameCell> frameCells){
+	  		super(c, res, frameCells);
 			  mContext = c;
-			  mStoryBoardCells = sbCells;
+			  mFrameCells = frameCells;
 	  	}
 
 	  	public int getCount() {
 			 //return fileList.size();
-			 return mStoryBoardCells.size();
+			 return mFrameCells.size();
 	  	}
 
 		@Override
 		public FrameCell getItem(int position) {
-			Log.i("ImageAdapter", "getItem");			
-			return mStoryBoardCells.get(position);
+			return mFrameCells.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			Log.i("ImageAdapter", "getItemIdv - position: "+position);
 			return position;
 		}
 
@@ -56,8 +54,8 @@ public class ImageAdapter extends ArrayAdapter<FrameCell>{
 			int length = 0;
 
 	        if (convertView == null) {  // if it's not recycled, initialize some attributes
-	        	
-	        	fCell = new View(mContext);
+
+	        	//fCell = new View(mContext);
 	        	fCell= (LinearLayout) inflater.inflate(R.layout.board_views, null);
 	        	
 	        	// Layout params shouldn't be hard coded
@@ -73,7 +71,7 @@ public class ImageAdapter extends ArrayAdapter<FrameCell>{
 	        	fCellHolder = (FCellHolder)fCell.getTag();
 	        }
 	        
-	        frame_no = (String) mStoryBoardCells.get(position).getTextView().getText();
+	        frame_no = (String) mFrameCells.get(position).getTextView().getText();
         	length = frame_no.length();
         	frame_no = frame_no.substring(0, length - 4);
         	fCellHolder.frame_number.setText("FRAME "+frame_no);
@@ -82,8 +80,8 @@ public class ImageAdapter extends ArrayAdapter<FrameCell>{
         	fCellHolder.fImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         	fCellHolder.fImage.setPadding(16, 16, 16, 16);
         	fCellHolder.fImage.setFocusable(false);
-			System.gc();
-        	bmp = BitmapFactory.decodeFile(mStoryBoardCells.get(position).getImageFile().toString());
+			//System.gc();
+        	bmp = BitmapFactory.decodeFile(mFrameCells.get(position).getImageFile().toString());
         	fCellHolder.fImage.setImageBitmap(bmp);
 
 	        return fCell;

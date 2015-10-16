@@ -107,13 +107,13 @@ public class AnimationSettingsDialogFragment extends DialogFragment {
                             } else {
                                 ((FrameSliderActivity) getActivity()).checkDirectory(file_name.getText().toString());
                             }
-
+                            /*
                             if(repeatBox.isChecked()){
                                 ((FrameSliderActivity) getActivity()).setRepeat(true);
                             }else{
                                 ((FrameSliderActivity) getActivity()).setRepeat(false);
                             }
-
+                            */
                         }
                     }
                 })

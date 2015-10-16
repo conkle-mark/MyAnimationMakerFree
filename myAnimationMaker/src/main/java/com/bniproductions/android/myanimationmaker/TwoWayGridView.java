@@ -150,7 +150,6 @@ public class TwoWayGridView extends TwoWayAbsListView {
         		// tToast("in setAdapter");
                 if (null != mAdapter) {
                         mAdapter.unregisterDataSetObserver(mDataSetObserver);
-                        //Log.i("TwoWayGridView", "setAdapter unregisteredDataSetObserver");
                 }
 
                 resetList();
@@ -272,7 +271,6 @@ public class TwoWayGridView extends TwoWayAbsListView {
                 mGridBuilder.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
 
-        //TODO implement horizontal support
         @Override
         protected void attachLayoutAnimationParameters(View child,
                         ViewGroup.LayoutParams params, int index, int count) {

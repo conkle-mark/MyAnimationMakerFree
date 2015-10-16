@@ -455,7 +455,7 @@ ViewTreeObserver.OnTouchModeChangeListener {
                  * Callback method to be invoked while the list view or grid view is being scrolled. If the
                  * view is being scrolled, this method will be called before the next frame of the scroll is
                  * rendered. In particular, it will be called before any calls to
-                 * {@link Adapter#getView(int, View, ViewGroup)}.
+                 *
                  *
                  * @param view The view whose scroll state is being reported
                  *
@@ -2869,8 +2869,6 @@ ViewTreeObserver.OnTouchModeChangeListener {
          * @param listener The recycler listener to be notified of views set aside
          *        in the recycler.
          *
-         * @see com.jess.ui.TwoWayAbsListView.RecycleBin
-         * @see com.jess.ui.TwoWayAbsListView.RecyclerListener
          */
         public void setRecyclerListener(RecyclerListener listener) {
                 mRecycler.mRecyclerListener = listener;
@@ -2933,8 +2931,7 @@ ViewTreeObserver.OnTouchModeChangeListener {
          * inside the RecycleBin's scrap heap. This listener is used to free resources
          * associated to Views placed in the RecycleBin.
          *
-         * @see com.jess.ui.TwoWayAbsListView.RecycleBin
-         * @see com.jess.ui.TwoWayAbsListView#setRecyclerListener(com.jess.ui.TwoWayAbsListView.RecyclerListener)
+         *
          */
         public static interface RecyclerListener {
                 /**
@@ -2954,9 +2951,11 @@ ViewTreeObserver.OnTouchModeChangeListener {
          * layout, all views in ActiveViews are demoted to ScrapViews. ScrapViews are old views that
          * could potentially be used by the adapter to avoid allocating views unnecessarily.
          *
-         * @see com.jess.ui.TwoWayAbsListView#setRecyclerListener(com.jess.ui.TwoWayAbsListView.RecyclerListener)
-         * @see com.jess.ui.TwoWayAbsListView.RecyclerListener
-         */
+         *
+         *  */
+         // @see com.jess.ui.TwoWayAbsListView#setRecyclerListener(com.jess.ui.TwoWayAbsListView.RecyclerListener)
+         // @see com.jess.ui.TwoWayAbsListView.RecyclerListener
+
         class RecycleBin {
                 private RecyclerListener mRecyclerListener;
 
@@ -3385,7 +3384,7 @@ ViewTreeObserver.OnTouchModeChangeListener {
 
                 /**
                  * Fires an "on scroll state changed" event to the registered
-                 * {@link com.jess.ui.TwoWayAbsListView.OnScrollListener}, if any. The state change
+                 * {@link com.//jess.ui.TwoWayAbsListView.OnScrollListener}, if any. The state change
                  * is fired only if the specified state is different from the previously known state.
                  *
                  * @param newState The new scroll state.
