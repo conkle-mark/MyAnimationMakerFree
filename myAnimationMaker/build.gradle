@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.bniproductions.android.myanimationmaker"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 23
     }
 
@@ -24,5 +24,7 @@ dependencies {
     compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
     compile 'org.lucasr.dspec:dspec:0.1.1'
+    testCompile 'junit:junit:4.12'
 }

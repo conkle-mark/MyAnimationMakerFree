@@ -28,4 +28,53 @@
         <item name="colorAccent">@color/accentCyan</item>
     </style>
 
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">@color/activity_background</item>
+        <item name="colorAccent">@color/activity_background</item>
+        <item name="colorControlNormal">@color/activity_background</item>
+        <item name="colorControlActivated">@color/activity_background</item>
+    </style>
+
+    <style name="MyDialogFragment" parent="AlertDialog.AppCompat.Light">
+        <item name="colorPrimary">@color/primaryCyan</item>
+        <item name="colorPrimaryDark">@color/primaryCyanDark</item>
+        <item name="colorAccent">@color/accentCyan</item>
+    </style>
+
+    <!-- Custom them uses the dialog themes below -->
+    <style name="Theme.Sphinx" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
+        <item name="android:alertDialogTheme">@style/Theme_Sphinx_Dialog_Alert</item>
+    </style>
+
+    <style name="Theme_Sphinx_Dialog_Alert" parent="@style/Theme_Holo_Dialog_Alert">
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle.Sphinx</item>
+    </style>
+
+    <style name="DialogWindowTitle.Sphinx" parent="@style/DialogWindowTitle_Holo">
+        <item name="android:textAppearance">@style/TextApperance.Sphinx.DialogWindowTitle</item>
+    </style>
+
+    <style name="TextApperance.Sphinx.DialogWindowTitle" parent="android:style/TextAppearance.Holo.DialogWindowTitle">
+        <item name="android:textColor">@color/primaryCyanDark</item>
+        <item name="android:fontFamily">sans-sarif-condensed</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- local copy of android:Theme.Holo.diaog.Alert -->
+    <style name="Theme_Holo_Dialog_Alert" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowBackground">@color/primaryCyanDark</item>
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle_Holo</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <!-- local copy of android:DialogWindowTitle.Holo -->
+    <style name="DialogWindowTitle_Holo">
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Holo.DialogWindowTitle</item>
+    </style>
+
 </resources>

@@ -8,7 +8,7 @@
     <string name="frame_rate">Frame Rate in frames/second</string>
     <string name="length_secs">Animation length in Seconds</string>
     <string name="length_mins">Animation length in minutes</string>
-    <string name="grid_limited">Allow more than 20 frames (not recommended)</string>
+    <string name="grid_limited">Allow more than 20 frames\n(not recommended)</string>
     <string name="repeat">Create repeating animation</string>
     <string name="enter_settings">Info</string>
     <string name="ok">OK</string>
@@ -30,8 +30,8 @@
     <string name="drawer_close">Close</string>
 
     <!-- over_write_directory.xml -->
-    <string name="over_write">This Directory already exists.  
-	    By clicking "OK", the directory and all files in it
+    <string name="over_write">This Project already exists.
+	    By clicking "OK", the project and all files in it
 	    will be deleted!  Do you wish to continue?</string>
 
     <!-- The intro about info -->
@@ -102,5 +102,11 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_activity_animation_setttings">\u0020 Animation Settings</string>
+
+    <string name="over_write_title_text">Over Write Project?</string>
+
+    <!-- on back pressed strings -->
+    <string name="on_back_pressed_title_text">Really Exit?</string>
+    <string name="on_back_pressed_body_text">Exit the Frame Slider?</string>
 
 </resources>
