@@ -31,6 +31,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.annotation.TargetApi;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -204,9 +205,12 @@ public class FrameSliderActivity extends AppCompatActivity {
     Intent intent;
     int position;
 
+    private boolean file_exists;
+
     Toolbar toolbar;
 
     OverWriteDirectoryDialogFragment overWriteDirectoryDialog;
+    CreateProjectDialogFragment writeDirectoryDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,9 +271,16 @@ public class FrameSliderActivity extends AppCompatActivity {
             getMemRequirements();
             checkProjectList();
             readProjectList();
-            checkDirectory(file_name);
+            file_exists = checkDirectory(file_name);
+            if(file_exists){
+                launchOverWrite();
+
+            }else{
+                launchWrite();
+            }
+            Log.d(DTAG, "after if file exist");
         }
-        Log.d(DTAG, "about: "+about);
+        Log.d(DTAG, "after if savedInstanceState null");
     }
 
     @Override
@@ -279,7 +290,7 @@ public class FrameSliderActivity extends AppCompatActivity {
     }
 
     private void hideSoftKeyBoard(){
-        Log.d(DTAG, "getCurrentFocus: "+getCurrentFocus());
+        Log.d(DTAG, "getCurrentFocus: " + getCurrentFocus());
         if(getCurrentFocus() != null){
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -561,7 +572,7 @@ public class FrameSliderActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            Log.d(DTAG, "writeSettingsXML at end");
         } else {
             Log.d(DTAG, "writeSettingsXML failed");
         }
@@ -682,18 +693,18 @@ public class FrameSliderActivity extends AppCompatActivity {
         String fileName;
         int index;
 
-        updateExternalStorageState();
+        //updateExternalStorageState();
         String dir = Environment.getExternalStorageDirectory().toString();
-        Log.d(DTAG, "line 701 dir: " + dir);
+
         dir = dir + "/myanimation_projects";
         rootDirectory = dir;
-        Log.d(DTAG, "rootDirectory: " + rootDirectory);
+
         File projectList = new File(dir);
         projectList.mkdir();
         File projectListFile = new File(dir, "project_list.json");
         if (projectList.exists()) {
             if (!projectListFile.exists()) {
-                Log.d(DTAG, "projectListFile.exists: " + projectListFile.exists());
+                //Log.d(DTAG, "projectListFile.exists: " + projectListFile.exists());
                 try {
                     FileWriter fw = new FileWriter(projectListFile);
                     BufferedWriter bw = new BufferedWriter(fw);
@@ -740,7 +751,7 @@ public class FrameSliderActivity extends AppCompatActivity {
 
                         try {
                             jsonArrayProjects = new JSONArray(jsonStr);
-                            Log.d(DTAG, "jsonArrayProjects.length() " + jsonArrayProjects.length());
+
                             for (int i = 0; i < jsonArrayProjects.length(); i++) {
                                 //projectNames.add(jsonArrayProjects.get(i).toString());
                                 fileName = jsonArrayProjects.get(i).toString();
@@ -748,7 +759,7 @@ public class FrameSliderActivity extends AppCompatActivity {
                                 fileName = fileName.substring(index + 1, fileName.length() - 2);
                                 //Log.d(DTAG, "projectNames.get(" + i + ") " + projectNames.get(i));
                                 projectNames.add(fileName);
-                                Log.d(DTAG, "checkProjectList - fileName: " + fileName);
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -919,8 +930,6 @@ public class FrameSliderActivity extends AppCompatActivity {
         animation_length_minutes = length;
         length_type = MINS;
         numberOfFrames();
-        Log.d(DTAG, "animation_length_secs: " + animation_length_secs);
-        Log.d(DTAG, "no_of_frames: " + no_of_frames);
         return true;
     }
 
@@ -950,43 +959,50 @@ public class FrameSliderActivity extends AppCompatActivity {
         this.setTitle("PROJECT: " + file_name);
     }
 
+    private void launchWrite(){
+        android.app.FragmentManager fm = getFragmentManager();
+
+        writeDirectoryDialog = new CreateProjectDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("file_name", file_name);
+        writeDirectoryDialog.setArguments(args);
+        writeDirectoryDialog.setRetainInstance(true);
+        writeDirectoryDialog.show(getSupportFragmentManager(), "write_fragment");
+    }
+
+    public void write(){
+        createFrames();
+        writeSettingsXML();
+        loadThumbGridView();
+    }
+
+    private void launchOverWrite(){
+        // Build a DialogFragment to ask do you wish to overwrite this directory.
+        android.app.FragmentManager fm = getFragmentManager();
+
+        overWriteDirectoryDialog = new OverWriteDirectoryDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("file_name", file_name);
+        overWriteDirectoryDialog.setArguments(args);
+        overWriteDirectoryDialog.setRetainInstance(true);
+        overWriteDirectoryDialog.show(fm, "fragment_name");
+    }
+
     /*
      * determine if this project already exists
      * if not, create it
      */
-    public void checkDirectory(String file_name) {
-        updateExternalStorageState();
+    public boolean checkDirectory(String file_name) {
+        //updateExternalStorageState();
         String dir = rootDirectory;
         dir = dir + "/" + file_name;
         File newdir = new File(dir);
 
-        if (newdir.exists()) {
-            // Build a DialogFragment to ask do you wish to overwrite this directory.
-            android.app.FragmentManager fm = getFragmentManager();
-
-            overWriteDirectoryDialog = new OverWriteDirectoryDialogFragment();
-
-            // set up the bundle to pass to the DialogFragment
-            Bundle args = new Bundle();
-            args.putString("file_name", file_name);
-            overWriteDirectoryDialog.setArguments(args);
-
-            overWriteDirectoryDialog.setRetainInstance(true);
-            overWriteDirectoryDialog.show(fm, "fragment_name");
-        } else {
-            Log.d(DTAG, "checkDirectory - dir.exists: " + newdir.exists());
-            //deleteDirectory(0);
-            //deleteDirectory();
-
-            createFrames();
-            loadThumbGridView();
-            writeSettingsXML();
-
-            //updateProjectList(dir);
-        }
+        return newdir.exists();
     }
-
-
+    /*
+    Read the list of projects from the json file
+     */
     private void readProjectList() {
         String jsonStr = null;
         FileInputStream inputStream;
@@ -1005,7 +1021,7 @@ public class FrameSliderActivity extends AppCompatActivity {
                     MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
 
                     jsonStr = Charset.defaultCharset().decode(bb).toString();
-                    Log.d(DTAG, "readProjectList - jsonString: " + jsonStr);
+
                     inputStream.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -1087,36 +1103,70 @@ public class FrameSliderActivity extends AppCompatActivity {
     }
 
     /*
-     * type consisto over_write, then create new
-     * or just delete
-     * 1. overwrite
-     * 2, just delete
+     *  Used when over-writing with a same named project
      */
     public void deleteDirectory() {
 
-        //int overwrite = type;
-
         // Close the NavigationDrawer
-        //if(overwrite == 1){
         DrawerLayout mDrawerLayout;
         mDrawerLayout = (DrawerLayout) findViewById(R.id.frame_slider_drawer);
         mDrawerLayout.closeDrawers();
-        //}
 
         String del_dir = rootDirectory;
         del_dir = del_dir + "/" + file_name;
+        String thumbs_dir = del_dir + "/" + "thumbs";
+        String settings_dir = del_dir + "/" + "settings";
+
         File dir = new File(del_dir);
+        File thumbsDir = new File(thumbs_dir);
+        File settingsDir = new File(settings_dir);
+
+        Log.d(DTAG, "deleteDirectory - del_dir: "+del_dir);
+        Log.d(DTAG, "deleteDirectory - thumbs_dir: "+thumbs_dir);
+        Log.d(DTAG, "deleteDirectory - settings_dir: " + settings_dir);
 
 		/*
 		 * Android System and/or FAT32 has problem maybe with deletes
 		 * and releasing resource, so rename before delete
+		 * + System.currentTimeMillis()
 		 */
-        final File to = new File(dir.getAbsolutePath() + System.currentTimeMillis());
+        final File to = new File(dir.getAbsolutePath());
         dir.renameTo(to);
 
-        //Log.d(DTAG, "deleteDirectory, file_name: "+file_name);
+        final File dir_to = new File(thumbsDir.getAbsolutePath());
+        thumbsDir.renameTo(dir_to);
+
+        Log.d(DTAG, "dir_to: "+dir_to.getAbsolutePath());
+
+
+        final File settings_to = new File(settingsDir.getAbsolutePath());
+        settingsDir.renameTo(settings_to);
+
+        Log.d(DTAG, "settings_to: "+settings_to.getAbsolutePath());
+
         if (to.isDirectory()) {
             String[] children = to.list();
+            if(dir_to.isDirectory()){
+                Log.d(DTAG, "dir_to is a directory");
+                String[] thumbChildren = dir_to.list();
+                for(int j = 0; j < thumbChildren.length; j++){
+                    new File(dir_to, thumbChildren[j]).delete();
+                }
+                dir_to.delete();
+            }else{
+                Log.d(DTAG, "dir_to is not a directory");
+            }
+            if(settings_to.isDirectory()){
+                Log.d(DTAG, "settings_to is a directory");
+                String[] settingsXML = settings_to.list();
+                for(int k = 0; k < settingsXML.length; k++){
+                    new File(settings_to, settingsXML[k]).delete();
+                }
+                settings_to.delete();
+            }else{
+                Log.d(DTAG, "setings_to is not a directory");
+            }
+
             for (int i = 0; i < children.length; i++) {
                 new File(to, children[i]).delete();
             }
@@ -1396,13 +1446,14 @@ public class FrameSliderActivity extends AppCompatActivity {
             Log.d(DTAG, "frameCells.size: "+frameCells.size());
 
             myGridView.setAdapter(new ImageAdapter(this, 0, frameCells));
-
+            Log.d(DTAG, "loadThumbGridView after setAdapter");
             myGridView.setOnItemClickListener(new TwoWayAdapterView.OnItemClickListener() {
                 public void onItemClick(TwoWayAdapterView<?> parent, View v, int position, long id) {
 
                     launchDrawFrame(position, id);
                 }
             });
+            Log.d(DTAG, "loadThumbsGridView after setOnClickListener");
         } else {
             Log.d(DTAG, "loadGridView() failed frameDir.exists() " + thumbsDir.exists());
         }
