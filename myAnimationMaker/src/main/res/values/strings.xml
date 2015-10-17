@@ -29,11 +29,6 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <!-- over_write_directory.xml -->
-    <string name="over_write">This Project already exists.
-	    By clicking "OK", the project and all files in it
-	    will be deleted!  Do you wish to continue?</string>
-
     <!-- The intro about info -->
     <string name="about_my_animation">With MyAnimationMaker
 	    you set the frame rate in frames per second and the 
@@ -104,6 +99,12 @@
     <string name="title_activity_activity_animation_setttings">\u0020 Animation Settings</string>
 
     <string name="over_write_title_text">Over Write Project?</string>
+    <string name="write_title_text">Create new Project?</string>
+    <!-- over_write_directory.xml -->
+    <string name="over_write">This Project already exists.
+	    By clicking "OK", the project and all files in it
+	    will be deleted!  Do you wish to continue?</string>
+    <string name="write_project">By clicking "OK", you will make a new project</string>
 
     <!-- on back pressed strings -->
     <string name="on_back_pressed_title_text">Really Exit?</string>
